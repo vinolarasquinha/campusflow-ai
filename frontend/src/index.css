@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-gray-300 font-sans min-h-screen selection:bg-brand-cyan/30 selection:text-white overflow-x-hidden;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(127, 0, 255, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(0, 242, 254, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(225, 0, 255, 0.04) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Custom Scrollbar for sleek premium look */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-800 rounded-full hover:bg-gray-700 transition-colors;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-glass-bg border border-glass-border rounded-2xl backdrop-blur-md shadow-glass-shadow transition-all duration-300;
+  }
+  
+  .glass-panel-hover {
+    @apply hover:border-glass-border/40 hover:bg-glass-bg/85 hover:shadow-glow-cyan/5 hover:-translate-y-0.5;
+  }
+
+  .btn-primary {
+    @apply relative overflow-hidden bg-gradient-to-r from-brand-blue to-brand-cyan text-background font-semibold px-5 py-2.5 rounded-xl shadow-glow-cyan hover:shadow-glow-cyan hover:brightness-110 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-900/60 border border-gray-800 hover:bg-gray-800/80 hover:border-gray-700 text-gray-200 px-5 py-2.5 rounded-xl active:scale-95 transition-all duration-200 flex items-center justify-center gap-2;
+  }
+
+  .btn-accent {
+    @apply bg-gradient-to-r from-brand-purple to-brand-magenta text-white font-semibold px-5 py-2.5 rounded-xl shadow-glow-purple hover:brightness-110 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2;
+  }
+
+  .input-field {
+    @apply w-full bg-background-deep/60 border border-gray-800 focus:border-brand-cyan/60 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-brand-cyan/60 transition-all duration-200;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple;
+  }
+}
+
+/* Custom micro-animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

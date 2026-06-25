@@ -1,0 +1,135 @@
+{
+  "name": "CampusFlow Notice Broadcast",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "notice-broadcast",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e23967a7-a8f8-4212-8ac8-d9dd9492cfe6",
+      "name": "Webhook",
+      "webhookId": "f5e1cb4a-a12e-4f51-9bce-f2436ec9770f"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "pagadala.rohith@btech.christuniversity.in"
+        },
+        "start": "={{ $json.body.eventDate }}",
+        "end": "={{ DateTime.fromISO($json.body.eventDate).plus({ hours: 1 }).toISO() }}",
+        "additionalFields": {
+          "description": "={{ $json.body.aiSummary }}",
+          "summary": "={{ $json.body.eventTitle }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        -192
+      ],
+      "id": "1203f0f4-144f-4bf0-b7da-f93a9c24f2f4",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "lP49v0XNepOtQdCS",
+          "name": "Google Calendar OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "from": "+14155238886",
+        "to": "={{$json.phone}}",
+        "toWhatsapp": true,
+        "message": "=📢 CampusFlow Notice\n\n{{$json.eventTitle}}\n\n{{$json.aiSummary}}\n\n📅 Added to your Google Calendar.\n\n— CampusFlow",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        448,
+        80
+      ],
+      "id": "90e8f66c-5e1d-448e-957b-dd98abc808bb",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "saWOI8bzqIlKQ0Tr",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\n\nreturn body.phoneList.map(phone => ({\n  json: {\n    phone: phone.replace(\"whatsapp:\", \"\"),\n    eventTitle: body.eventTitle,\n    aiSummary: body.aiSummary\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1fae1915-7d59-47fa-a183-644d195bc718",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "10029f2d-efc3-4241-b9a6-7318ae731f44",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9c8087d5b6ded46d4fa17d07f70719117bc5670c67020ba467269eaa7c3965ca"
+  },
+  "nodeGroups": [],
+  "id": "qWgPGuhLUuZD9mBS",
+  "tags": []
+}
